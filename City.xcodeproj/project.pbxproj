@@ -13,6 +13,10 @@
 		B32D40D32A043961006AAC3B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B32D40D22A043961006AAC3B /* Preview Assets.xcassets */; };
 		B32D40D52A043961006AAC3B /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32D40D42A043961006AAC3B /* Persistence.swift */; };
 		B32D40D82A043961006AAC3B /* City.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B32D40D62A043961006AAC3B /* City.xcdatamodeld */; };
+		B32D40DF2A043991006AAC3B /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32D40DE2A043991006AAC3B /* MapView.swift */; };
+		B32D40E12A0439FA006AAC3B /* LocationDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32D40E02A0439FA006AAC3B /* LocationDataManager.swift */; };
+		B32D40E42A043E2E006AAC3B /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32D40E32A043E2E006AAC3B /* UserView.swift */; };
+		B32D40E62A044208006AAC3B /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32D40E52A044208006AAC3B /* ListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +27,11 @@
 		B32D40D22A043961006AAC3B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		B32D40D42A043961006AAC3B /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		B32D40D72A043961006AAC3B /* City.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = City.xcdatamodel; sourceTree = "<group>"; };
+		B32D40DE2A043991006AAC3B /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		B32D40E02A0439FA006AAC3B /* LocationDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDataManager.swift; sourceTree = "<group>"; };
+		B32D40E22A043A26006AAC3B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B32D40E32A043E2E006AAC3B /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
+		B32D40E52A044208006AAC3B /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,8 +64,13 @@
 		B32D40CA2A04395F006AAC3B /* City */ = {
 			isa = PBXGroup;
 			children = (
+				B32D40E22A043A26006AAC3B /* Info.plist */,
 				B32D40CB2A04395F006AAC3B /* CityApp.swift */,
 				B32D40CD2A04395F006AAC3B /* ContentView.swift */,
+				B32D40DE2A043991006AAC3B /* MapView.swift */,
+				B32D40E52A044208006AAC3B /* ListView.swift */,
+				B32D40E32A043E2E006AAC3B /* UserView.swift */,
+				B32D40E02A0439FA006AAC3B /* LocationDataManager.swift */,
 				B32D40CF2A043961006AAC3B /* Assets.xcassets */,
 				B32D40D42A043961006AAC3B /* Persistence.swift */,
 				B32D40D62A043961006AAC3B /* City.xcdatamodeld */,
@@ -143,10 +157,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B32D40E62A044208006AAC3B /* ListView.swift in Sources */,
 				B32D40D52A043961006AAC3B /* Persistence.swift in Sources */,
 				B32D40CE2A04395F006AAC3B /* ContentView.swift in Sources */,
+				B32D40DF2A043991006AAC3B /* MapView.swift in Sources */,
 				B32D40D82A043961006AAC3B /* City.xcdatamodeld in Sources */,
+				B32D40E12A0439FA006AAC3B /* LocationDataManager.swift in Sources */,
 				B32D40CC2A04395F006AAC3B /* CityApp.swift in Sources */,
+				B32D40E42A043E2E006AAC3B /* UserView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,6 +295,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"City/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = City/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Address?";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -305,6 +325,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"City/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = City/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Address?";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
