@@ -13,6 +13,9 @@ struct MapView: View {
     
     @StateObject var locationDataManager = LocationDataManager()
     @State private var userTrackingMode: MapUserTrackingMode = .follow
+    @State private var distance: String?
+//    let searchResult: MKLocalSearchCompletion
+
     @State private var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(
             latitude: 0.0,
@@ -21,6 +24,9 @@ struct MapView: View {
             latitudeDelta: 0.03,
             longitudeDelta: 0.03)
     )
+    
+    @State private var searchText = ""
+
     var body: some View {
         
         ZStack{
@@ -30,10 +36,13 @@ struct MapView: View {
                 userTrackingMode: $userTrackingMode
             )
             .edgesIgnoringSafeArea(.all)
+            
             VStack {
                 
                 HStack {
-                    
+//                    Text(<#T##attributedContent: AttributedString##AttributedString#>)
+//                    TextField("Search..", text:searchResult).textFieldStyle(.roundedBorder)
+    
                     Spacer()
                     VStack {
                         Button(action: {
@@ -116,8 +125,3 @@ struct MapView: View {
     }
 }
 
-struct MapView_Previews: PreviewProvider {
-    static var previews: some View {
-        MapView()
-    }
-}

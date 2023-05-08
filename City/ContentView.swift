@@ -12,41 +12,56 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            VStack{
+            ZStack{
+                Image("Splash")
                 Spacer()
-                
-                HStack{
-                    NavigationLink(
-                        destination:UserView(),
-                        label: {Image(systemName: "person.circle")
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .padding(10)
-                        })
-                    NavigationLink (
-                        destination:MapView(),
-                        label: {Image(systemName: "map")
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .padding(10)
-                        })
-                    NavigationLink (
-                        destination:ListView(),
-                        label: {Image(systemName: "list.star")
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .padding(10)
-                        })
-                    NavigationLink (
-                        destination:ListView(),
-                        label: {Image(systemName: "speaker.wave.1")
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .padding(10)
-                        })
+                VStack{
+                    HStack{
+                        Spacer()
 
+                        NavigationLink(
+                            destination:UserView(),
+                            label: {Image(systemName: "person.circle")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .padding(10)
+                                    .accentColor(Color.white)
 
+                            })
+                        NavigationLink (
+                            destination:MapView(),
+                            label: {Image(systemName: "map")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .padding(10)
+                                    .accentColor(Color.white)
+
+                            })
+                        NavigationLink (
+                            destination:ListView(), 
+                            label: {Image(systemName: "list.star")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .padding(10)
+                                    .accentColor(Color.white)
+
+                            })
+                        NavigationLink (
+                            destination:SettingsView(),
+                            label: {Image(systemName: "gearshape.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .padding(10)
+                                    .accentColor(Color.white)
+
+                            })
+                        Spacer()
+
+                        
+                    }.background(Color.black)
                 }
+                Spacer()
+
                 
             }
             

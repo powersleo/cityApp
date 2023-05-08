@@ -17,6 +17,7 @@
 		B32D40E12A0439FA006AAC3B /* LocationDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32D40E02A0439FA006AAC3B /* LocationDataManager.swift */; };
 		B32D40E42A043E2E006AAC3B /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32D40E32A043E2E006AAC3B /* UserView.swift */; };
 		B32D40E62A044208006AAC3B /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32D40E52A044208006AAC3B /* ListView.swift */; };
+		B336E90D2A09803800770053 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B336E90C2A09803800770053 /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		B32D40E22A043A26006AAC3B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B32D40E32A043E2E006AAC3B /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		B32D40E52A044208006AAC3B /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
+		B336E90C2A09803800770053 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 				B32D40CB2A04395F006AAC3B /* CityApp.swift */,
 				B32D40CD2A04395F006AAC3B /* ContentView.swift */,
 				B32D40DE2A043991006AAC3B /* MapView.swift */,
+				B336E90C2A09803800770053 /* SettingsView.swift */,
 				B32D40E52A044208006AAC3B /* ListView.swift */,
 				B32D40E32A043E2E006AAC3B /* UserView.swift */,
 				B32D40E02A0439FA006AAC3B /* LocationDataManager.swift */,
@@ -160,6 +163,7 @@
 				B32D40E62A044208006AAC3B /* ListView.swift in Sources */,
 				B32D40D52A043961006AAC3B /* Persistence.swift in Sources */,
 				B32D40CE2A04395F006AAC3B /* ContentView.swift in Sources */,
+				B336E90D2A09803800770053 /* SettingsView.swift in Sources */,
 				B32D40DF2A043991006AAC3B /* MapView.swift in Sources */,
 				B32D40D82A043961006AAC3B /* City.xcdatamodeld in Sources */,
 				B32D40E12A0439FA006AAC3B /* LocationDataManager.swift in Sources */,
