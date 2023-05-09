@@ -8,8 +8,16 @@
 import SwiftUI
 import CoreData
 
+
+func fetchPlaces() -> IdentifiablePlace{
+    return IdentifiablePlace(lat:37.73161938479969, long:-122.48630473429115, name:"my house")
+}
 struct ContentView: View {
-    
+    var place: IdentifiablePlace
+
+    init(){
+        place = fetchPlaces()
+    }
     var body: some View {
         NavigationView {
             ZStack{
@@ -29,7 +37,7 @@ struct ContentView: View {
 
                             })
                         NavigationLink (
-                            destination:MapView(),
+                            destination:MapView(place: place),
                             label: {Image(systemName: "map")
                                     .resizable()
                                     .frame(width: 40, height: 40)

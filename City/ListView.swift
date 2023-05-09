@@ -9,8 +9,11 @@ import SwiftUI
 
 struct ListView: View {
     var body: some View {
-        Text("Recently visited locations")
-    }
+        List {
+               Text("this is a bar")
+               Text("click")
+               Text("Hello World")
+           }    }
 }
 
 struct ListView_Previews: PreviewProvider {
