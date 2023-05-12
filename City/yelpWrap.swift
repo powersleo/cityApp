@@ -11,7 +11,7 @@ struct Response: Codable {
     let businesses: [Business]
 }
 
-struct Business: Codable {
+struct Business: Codable, Identifiable {
     let id: String
     let alias: String
     let name: String
@@ -29,6 +29,7 @@ struct Business: Codable {
     let displayPhone: String
     let distance: Double
 }
+
 
 struct Category: Codable {
     let alias: String
@@ -79,14 +80,14 @@ class BusinessService{
     
     
    public static func processBusinesses(long:Double, lat:Double,completion: @escaping (Result<Response, Error>) -> Void) {
-       let apiKey = "zr_0hkxu6CTZoVReGZBfy2BjAOyECf3PMFqPRH-X0YKQP4r_m8TFzE-Q6DT0hfTMVWL0UQXwEm5wvRpsUgMounoawx5UspT4_7scX_9vJ_sTAuoEmwJIZHwqRPtaZHYx"
+       let apiKey = "2a4LtmRKjx2uRW_m64Huawye2QILm5lIpxLFofuq96FmxC5dk-5FuIr0uiDNoWemIG5Jk2IajsByyDc16xaXTxyC_LwW9L-msDDgI8fqRlr4IGdNzZkHmFbOZOVdZHYx"
        guard let url = createURL(longitude: long, latitude: lat) else {
                let error = NSError(domain: "com.example.app", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create URL"])
                completion(.failure(error))
                return
         }
         
-       let headers = ["accept": "application/json",   "Authorization": "Bearer zr_0hkxu6CTZoVReGZBfy2BjAOyECf3PMFqPRH-X0YKQP4r_m8TFzE-Q6DT0hfTMVWL0UQXwEm5wvRpsUgMounoawx5UspT4_7scX_9vJ_sTAuoEmwJIZHwqRPtaZHYx"]
+       let headers = ["accept": "application/json",   "Authorization": "Bearer hehe"]
        let request = NSMutableURLRequest(url: url,cachePolicy: .useProtocolCachePolicy,timeoutInterval: 10.0)
        request.httpMethod = "GET"
        request.allHTTPHeaderFields = headers

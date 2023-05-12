@@ -21,6 +21,8 @@
 		B336E90F2A09CE7700770053 /* IdentifiablePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = B336E90E2A09CE7700770053 /* IdentifiablePlace.swift */; };
 		B336E9112A09D30600770053 /* BarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B336E9102A09D30600770053 /* BarView.swift */; };
 		B336E9132A0B314F00770053 /* yelpWrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B336E9122A0B314F00770053 /* yelpWrap.swift */; };
+		B34264E12A0EEA79000CD0AE /* BusinessProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34264E02A0EEA79000CD0AE /* BusinessProfileView.swift */; };
+		B34264E32A0EFEC7000CD0AE /* WriteReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34264E22A0EFEC7000CD0AE /* WriteReviewView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +42,8 @@
 		B336E90E2A09CE7700770053 /* IdentifiablePlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiablePlace.swift; sourceTree = "<group>"; };
 		B336E9102A09D30600770053 /* BarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarView.swift; sourceTree = "<group>"; };
 		B336E9122A0B314F00770053 /* yelpWrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = yelpWrap.swift; sourceTree = "<group>"; };
+		B34264E02A0EEA79000CD0AE /* BusinessProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessProfileView.swift; sourceTree = "<group>"; };
+		B34264E22A0EFEC7000CD0AE /* WriteReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteReviewView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +82,8 @@
 				B336E9102A09D30600770053 /* BarView.swift */,
 				B336E90E2A09CE7700770053 /* IdentifiablePlace.swift */,
 				B32D40DE2A043991006AAC3B /* MapView.swift */,
+				B34264E02A0EEA79000CD0AE /* BusinessProfileView.swift */,
+				B34264E22A0EFEC7000CD0AE /* WriteReviewView.swift */,
 				B336E90C2A09803800770053 /* SettingsView.swift */,
 				B32D40E52A044208006AAC3B /* ListView.swift */,
 				B32D40E32A043E2E006AAC3B /* UserView.swift */,
@@ -174,10 +180,12 @@
 				B32D40D52A043961006AAC3B /* Persistence.swift in Sources */,
 				B32D40CE2A04395F006AAC3B /* ContentView.swift in Sources */,
 				B336E90D2A09803800770053 /* SettingsView.swift in Sources */,
+				B34264E12A0EEA79000CD0AE /* BusinessProfileView.swift in Sources */,
 				B32D40DF2A043991006AAC3B /* MapView.swift in Sources */,
 				B32D40D82A043961006AAC3B /* City.xcdatamodeld in Sources */,
 				B32D40E12A0439FA006AAC3B /* LocationDataManager.swift in Sources */,
 				B336E90F2A09CE7700770053 /* IdentifiablePlace.swift in Sources */,
+				B34264E32A0EFEC7000CD0AE /* WriteReviewView.swift in Sources */,
 				B336E9132A0B314F00770053 /* yelpWrap.swift in Sources */,
 				B32D40CC2A04395F006AAC3B /* CityApp.swift in Sources */,
 				B32D40E42A043E2E006AAC3B /* UserView.swift in Sources */,

@@ -1,5 +1,4 @@
 import SwiftUI
-import CoreData
 import MapKit
 
 class ContentViewViewModel: ObservableObject {
@@ -13,38 +12,37 @@ class ContentViewViewModel: ObservableObject {
             longitudeDelta: 0.03)
     )
     @Published var businesses: [Business] = []
-    @Published var place: [IdentifiablePlace] = []
     @StateObject var locationDataManager = LocationDataManager()
     
-    func fetchPlaces(long: Double, lat: Double) {
+    func fetchPlaces(long: Double, lat: Double, completion: @escaping ([Business]?, Error?) -> Void) {
         BusinessService.processBusinesses(long: long, lat: lat) { result in
             switch result {
             case .success(let response):
                 DispatchQueue.main.async {
                     self.businesses = response.businesses
-                    self.place = self.fetchPlaces(from: response.businesses)
+                    self.updateMapRegion()
+                    completion(response.businesses, nil)
                 }
             case .failure(let error):
                 print("Error: \(error)")
+                completion(nil, error)
             }
         }
     }
     
-    func fetchPlaces(from businesses: [Business]) -> [IdentifiablePlace] {
-        var identifiablePlaces: [IdentifiablePlace] = []
-        
-        for business in businesses {
-            let place = IdentifiablePlace(
-                id: UUID(),
-                lat: business.coordinates.latitude,
-                long: business.coordinates.longitude,
-                name: business.name
-            )
-            
-            identifiablePlaces.append(place)
+    private func updateMapRegion() {
+        guard let firstBusiness = businesses.first else {
+            return
         }
         
-        return identifiablePlaces
+        region.center = CLLocationCoordinate2D(
+            latitude: firstBusiness.coordinates.latitude,
+            longitude: firstBusiness.coordinates.longitude
+        )
+        region.span = MKCoordinateSpan(
+            latitudeDelta: 0.03,
+            longitudeDelta: 0.03
+        )
     }
 }
 
@@ -54,7 +52,6 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             ZStack {
-
                 VStack {
                     Spacer()
                     
@@ -69,7 +66,7 @@ struct ContentView: View {
                                 .accentColor(Color.white)
                         }
                         
-                        NavigationLink(destination: MapView(userTrackingMode: $viewModel.userTrackingMode, region: $viewModel.region, place: viewModel.place)) {
+                        NavigationLink(destination: MapView(userTrackingMode: $viewModel.userTrackingMode, region: $viewModel.region, businesses: viewModel.businesses)) {
                             Image(systemName: "map")
                                 .resizable()
                                 .frame(width: 40, height: 40)
@@ -98,15 +95,19 @@ struct ContentView: View {
                     .background(Color.black)
                     .padding(10)
                 }
-                
-                Spacer()
             }
-        }
-        .onAppear {
-            viewModel.fetchPlaces(
-                long: viewModel.locationDataManager.locationManager.location?.coordinate.longitude ?? 0.0,
-                lat: viewModel.locationDataManager.locationManager.location?.coordinate.latitude ?? 0.0
-            )
+            .onAppear {
+                viewModel.fetchPlaces(
+                    long: viewModel.locationDataManager.locationManager.location?.coordinate.longitude ?? 0.0,
+                    lat: viewModel.locationDataManager.locationManager.location?.coordinate.latitude ?? 0.0
+                ) { businesses, error in
+                    if let businesses = businesses {
+                        // Handle the fetched businesses
+                    } else if let error = error {
+                        // Handle the error
+                    }
+                }
+            }
         }
     }
 }

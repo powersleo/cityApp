@@ -6,7 +6,8 @@ struct MapView: View {
     @Binding var userTrackingMode: MapUserTrackingMode
     @Binding var region: MKCoordinateRegion
     @State private var searchText = ""
-    var place: [IdentifiablePlace]
+    var businesses: [Business]  // Add businesses property
+    @State private var selectedBusiness: Business?  // Add selectedBusiness property
     
     var body: some View {
         ZStack {
@@ -14,16 +15,32 @@ struct MapView: View {
                 interactionModes: MapInteractionModes.all,
                 showsUserLocation: true,
                 userTrackingMode: $userTrackingMode,
-                annotationItems: place
-            ) { place in
-                MapAnnotation(coordinate: place.location, content: {
-                    Image(systemName: "pin.circle.fill")
-                        .foregroundColor(.red)
-                    Text(place.name)
+                annotationItems: businesses
+            ) { business in
+                MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: business.coordinates.latitude, longitude: business.coordinates.longitude)) {
+                    Button(action: {
+                        selectedBusiness = business  // Set the selected business
+                    }, label: {
+                        Image(systemName: "pin.circle.fill")
+                            .foregroundColor(.red)
+                    })
+                    
+                    Text(business.name)
                         .fixedSize()
-                })
+                }
             }
-            .edgesIgnoringSafeArea(.all)
+            
+            if let selectedBusiness = selectedBusiness {
+                BusinessProfileView(business: selectedBusiness)
+//                    .onTapGesture {
+//                        self.selectedBusiness = nil  // Reset the selected business
+//                    }
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(8)
+                    .shadow(radius: 4)
+                    .padding(16)
+            }
             
             VStack {
                 HStack {
