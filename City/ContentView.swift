@@ -66,6 +66,7 @@ struct ContentView: View {
                                 .accentColor(Color.white)
                         }
                         
+                      
                         NavigationLink(destination: MapView(userTrackingMode: $viewModel.userTrackingMode, region: $viewModel.region, businesses: viewModel.businesses)) {
                             Image(systemName: "map")
                                 .resizable()

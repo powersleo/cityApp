@@ -5,12 +5,29 @@ struct MapView: View {
     @StateObject var locationDataManager = LocationDataManager()
     @Binding var userTrackingMode: MapUserTrackingMode
     @Binding var region: MKCoordinateRegion
-    @State private var searchText = ""
+    
+    @State private var searchQuery: String = ""
+    @State private var searchResults: [MKMapItem] = []
+    @State var selectedBusiness: Business?
+    @State private var showResults: Bool = false
+    
+    
     var businesses: [Business]
-    @State private var selectedBusiness: Business?
+    @State var showNav: Bool = true
     
     var body: some View {
+        VStack{
+            SearchBar(searchQuery: $searchQuery, searchResults: $searchResults, showResults: $showResults, selectedBusiness: $selectedBusiness, businesses: businesses)
+            
+        }.onTapGesture {
+            self.showNav = false
+            
+        }.onSubmit {
+            self.showNav = true
+            
+        }
         ZStack {
+            
             Map(coordinateRegion: $region,
                 interactionModes: MapInteractionModes.all,
                 showsUserLocation: true,
@@ -19,7 +36,8 @@ struct MapView: View {
             ) { business in
                 MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: business.coordinates.latitude, longitude: business.coordinates.longitude)) {
                     Button(action: {
-                        selectedBusiness = business  
+                        selectedBusiness = business
+                        self.showNav = false
                     }, label: {
                         Image(systemName: "wineglass.fill")
                             .foregroundColor(.red)
@@ -31,27 +49,28 @@ struct MapView: View {
                     }
                 }
             }.edgesIgnoringSafeArea(.all)
-            .onTapGesture {
-//                    if(selectedBusiness != nil ){
-//                        self.selectedBusiness = nil
-//
-//                    }
+                .onTapGesture {
+                    //                    if(selectedBusiness != nil ){
+                    //                        self.selectedBusiness = nil
+                    //
+                    //                    }
                 }
-
+            
             
             if let selectedBusiness = selectedBusiness {
                 VStack{
                     BusinessProfileView(business: selectedBusiness)
-                    Button(action:{self.selectedBusiness = nil}, label:{Text("Close")}  )
+                    Button(action:{self.selectedBusiness = nil
+                        self.showNav = true}, label:{Text("Close")}  )
                     
-                        
+                    
                 }.padding()
                     .background(Color.white)
                     .cornerRadius(8)
                     .shadow(radius: 4)
                     .padding(16)
             }
-            if(selectedBusiness == nil){
+            if(showNav){
                 VStack {
                     HStack {
                         Spacer()
@@ -114,8 +133,90 @@ struct MapView: View {
                     }
                     
                     Spacer()
+                }}
+        }
+    }
+}
+
+
+
+struct SearchBar: View {
+    @Binding var searchQuery: String
+    @Binding var searchResults: [MKMapItem]
+    @Binding var showResults: Bool
+    @Binding var selectedBusiness: Business?
+    var businesses: [Business]
+    
+    @State private var showAlert = false
+    
+    var body: some View {
+        VStack {
+            HStack {
+                TextField("Search", text: $searchQuery, onCommit: {
+                    performSearch()
+                    self.showResults = true
+                    showAlert = searchResults.isEmpty 
+                })
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                
+                Button(action: clearSearch) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.gray)
+                        .opacity(searchQuery.isEmpty ? 0 : 1)
+                }
+            }
+            
+            if showResults {
+                if searchResults.isEmpty {
+                    Text("No results found")
+                        .foregroundColor(.gray)
+                        .padding(.top, 8)
+                } else {
+                    List(searchResults, id: \.self) { result in
+                        VStack(alignment: .leading) {
+                            Text(result.name ?? "")
+                                .font(.headline)
+                            Text(result.placemark.title ?? "")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                        .onTapGesture {
+                            if let selectedBusiness = businesses.first(where: { $0.name == result.name }) {
+                                self.selectedBusiness = selectedBusiness
+                                clearSearch()
+                            }
+                        }
+                    }
                 }
             }
         }
+        .alert(isPresented: $showAlert) {
+            Alert(
+                title: Text("No Results"),
+                message: Text("No results found for your search."),
+                dismissButton: .default(Text("OK"))
+            )
+        }
+    }
+    
+    private func performSearch() {
+        let filteredBusinesses = businesses.filter { business in
+            let businessName = business.name.lowercased()
+            return businessName.contains(searchQuery.lowercased())
+        }
+        
+        searchResults = filteredBusinesses.map { business in
+            let coordinate = CLLocationCoordinate2D(latitude: business.coordinates.latitude, longitude: business.coordinates.longitude)
+            let placemark = MKPlacemark(coordinate: coordinate)
+            let mapItem = MKMapItem(placemark: placemark)
+            mapItem.name = business.name
+            return mapItem
+        }
+    }
+    
+    private func clearSearch() {
+        searchQuery = ""
+        searchResults.removeAll()
+        self.showResults = false
     }
 }
