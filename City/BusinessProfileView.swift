@@ -5,6 +5,7 @@
 //  Created by Leo Powers on 5/12/23.
 //
 
+
 import SwiftUI
 
 struct BusinessProfileView: View {
@@ -13,6 +14,8 @@ struct BusinessProfileView: View {
     @State private var newReview: String = ""
     @State private var reviews: [Review] = []
     
+    @AppStorage("Reviews") var storedReviewsData: Data = Data()
+
     var body: some View {
         let distanceInMiles = Measurement(value: business.distance, unit: UnitLength.meters).converted(to: UnitLength.miles)
         
@@ -52,18 +55,21 @@ struct BusinessProfileView: View {
             ScrollView {
                 VStack(alignment: .leading) {
                     ForEach(reviews, id: \.self) { review in
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text(review.name)
-                            HStack {
-                                ForEach(1...5, id: \.self) { index in
-                                    Image(systemName: index <= review.rating ? "star.fill" : "star")
-                                        .foregroundColor(.yellow)
-                                        .font(.subheadline)
+                        if(review.businessName == business.name){
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack {
+                                    Text(review.name).bold()
+                                    ForEach(1...5, id: \.self) { index in
+                                        Image(systemName: index <= Int(review.rating) ? "star.fill" : "star")
+                                            .foregroundColor(.yellow)
+                                            .font(.subheadline)
+                                    }
                                 }
+                                Text(review.text)
                             }
-                            Text(review.text)
-                        } .border(.green)
-                        .padding(.bottom, 8)
+                            
+                            .padding(.bottom, 8)
+                        }
                     }
                 }
                 Button(action: {
@@ -80,26 +86,52 @@ struct BusinessProfileView: View {
                 
                 Spacer()
             }
-            .navigationBarTitle(business.name)
             .sheet(isPresented: $isWritingReview) {
-                WriteReviewView(isPresented: $isWritingReview) { review,name, rating in
+                WriteReviewView(isPresented: $isWritingReview) {review, name, rating in
                     saveReview(review: review, name:name, rating: rating)
                 }
             }
-        }
+        }.frame(width:300,height: 600).onAppear{
+            loadReviews()
+}
+
     }
     
-    private func saveReview(review: String, name:String, rating: Int) {
-        let newReview = Review(text: review, name:name, rating: rating)
+    private func saveReview(review: String, name:String, rating: Double) {
+        let newReview = Review(text: review, name:name, rating: rating, businessName: business.name)
         reviews.append(newReview)
+        saveReviews()
     }
+    private func saveReviews() {
+          do {
+              let encoder = JSONEncoder()
+              let data = try encoder.encode(reviews)
+              
+              storedReviewsData = data
+          } catch {
+              print("Failed to encode reviews: \(error)")
+          }
+      }
+      
+      private func loadReviews() {
+          do {
+              let decoder = JSONDecoder()
+              let reviewsData = storedReviewsData
+              
+              let decodedReviews = try decoder.decode([Review].self, from: reviewsData)
+              
+              reviews = decodedReviews
+          } catch {
+              print("Failed to decode reviews: \(error)")
+          }
+      }
 }
 
-struct Review: Identifiable, Hashable {
-    let id = UUID()
+struct Review: Identifiable, Hashable,Codable
+{
+    var id = UUID()
     let text: String
     let name:String
-    let rating: Int
+    let rating: Double
+    let businessName: String
 }
-
-

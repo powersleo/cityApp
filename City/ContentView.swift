@@ -102,9 +102,8 @@ struct ContentView: View {
                     lat: viewModel.locationDataManager.locationManager.location?.coordinate.latitude ?? 0.0
                 ) { businesses, error in
                     if let businesses = businesses {
-                        // Handle the fetched businesses
+                        viewModel.businesses = businesses
                     } else if let error = error {
-                        // Handle the error
                     }
                 }
             }

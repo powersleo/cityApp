@@ -9,37 +9,28 @@ import SwiftUI
 
 struct WriteReviewView: View {
     @Binding var isPresented: Bool
-    @State private var rating: Int = 0
+    @State private var rating: Double = 0
     @State private var reviewText: String = ""
     @State private var name: String = ""
-    let onSave: (String,String, Int) -> Void
+
+    let onSave: (String, String, Double) -> Void
     
     var body: some View {
         NavigationView {
             VStack {
-                VStack(alignment: .leading, spacing: 16) {
-                    HStack {
-                        Text("Rating:")
+                VStack{
+                    Form {
+                        Section {
+                            Text("Enter a Name").bold()
+                            TextField("Name", text: $name)
+                            
+                            Text("Rating: \(Int(rating))").bold()
+                            Slider(value: $rating, in: 1...5, step: 1)
+                            Text("Write a Review:")
                             .font(.headline)
-                        
-                        Spacer()
-                        
-                        Stepper(value: $rating, in: 1...5) {
-                            Text("\(rating)")
-                        }
+                            TextEditor(text: $reviewText)
+                        } 
                     }
-                    Text("Name")
-                    TextEditor(text: $name)
-                        .frame(height: 50)
-                        .border(Color.gray, width: 1)
-                    
-                    Text("Write a Review:")
-                        .font(.headline)
-                    
-
-                    TextEditor(text: $reviewText)
-                        .frame(height: 150)
-                        .border(Color.gray, width: 1)
                 }
                 .padding()
                 
