@@ -1,6 +1,7 @@
 
 import Foundation
 import CoreLocation
+import SwiftUI
 
 class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegate {
     var locationManager = CLLocationManager()
@@ -10,27 +11,35 @@ class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegat
         super.init()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
+        print("initializing locations *************")
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
-        case .authorizedWhenInUse:  // Location services are available.
-            // Insert code here of what should happen when Location services are authorized
+        case .authorizedWhenInUse:
             authorizationStatus = .authorizedWhenInUse
             locationManager.requestLocation()
             break
             
-        case .restricted:  // Location services currently unavailable.
-            // Insert code here of what should happen when Location services are NOT authorized
+        case .restricted:
+            Alert(
+                            title: Text("nothing will work"),
+                            message: Text("cmon bruh."),
+                            dismissButton: .default(Text("OK"))
+            );
             authorizationStatus = .restricted
             break
             
-        case .denied:  // Location services currently unavailable.
-            // Insert code here of what should happen when Location services are NOT authorized
+        case .denied:
+            Alert(
+                            title: Text("nothing will work"),
+                            message: Text("cmon bruh."),
+                            dismissButton: .default(Text("OK"))
+            );
             authorizationStatus = .denied
             break
             
-        case .notDetermined:        // Authorization not determined yet.
+        case .notDetermined:
             authorizationStatus = .notDetermined
             manager.requestWhenInUseAuthorization()
             break
@@ -41,7 +50,6 @@ class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegat
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        // Insert code to handle location updates
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

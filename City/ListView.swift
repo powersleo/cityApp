@@ -8,16 +8,18 @@
 import SwiftUI
 
 struct ListView: View {
+    @Binding var recentlyViewedPages: [Business]
+
     var body: some View {
         List {
-               Text("this is a bar")
-               Text("click")
-               Text("Hello World")
+            ForEach(recentlyViewedPages) { business in
+                                    Text(business.name)
+                                }
            }    }
 }
-
-struct ListView_Previews: PreviewProvider {
-    static var previews: some View {
-        ListView()
-    }
-}
+//
+//struct ListView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ListView()
+//    }
+//}

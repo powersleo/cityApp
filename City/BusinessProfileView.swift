@@ -13,9 +13,10 @@ struct BusinessProfileView: View {
     @State private var isWritingReview = false
     @State private var newReview: String = ""
     @State private var reviews: [Review] = []
-    
-    @AppStorage("Reviews") var storedReviewsData: Data = Data()
+    @Environment(\.colorScheme) var colorScheme
 
+    @AppStorage("Reviews") var storedReviewsData: Data = Data()
+    
     var body: some View {
         let distanceInMiles = Measurement(value: business.distance, unit: UnitLength.meters).converted(to: UnitLength.miles)
         
@@ -54,21 +55,25 @@ struct BusinessProfileView: View {
             
             ScrollView {
                 VStack(alignment: .leading) {
-                    ForEach(reviews, id: \.self) { review in
-                        if(review.businessName == business.name){
-                            VStack(alignment: .leading, spacing: 8) {
-                                HStack {
-                                    Text(review.name).bold()
-                                    ForEach(1...5, id: \.self) { index in
-                                        Image(systemName: index <= Int(review.rating) ? "star.fill" : "star")
-                                            .foregroundColor(.yellow)
-                                            .font(.subheadline)
+                    if reviews.isEmpty {
+                        Text("No reviews yet :(")
+                            .foregroundColor(.gray)
+                    } else {
+                        ForEach(reviews, id: \.self) { review in
+                            if review.businessName == business.name {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack {
+                                        Text(review.name).bold().foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                                        ForEach(1...5, id: \.self) { index in
+                                            Image(systemName: index <= Int(review.rating) ? "star.fill" : "star")
+                                                .foregroundColor(.yellow)
+                                                .font(.subheadline)
+                                        }
                                     }
+                                    Text(review.text).foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                                 }
-                                Text(review.text)
+                                .padding(.bottom, 8)
                             }
-                            
-                            .padding(.bottom, 8)
                         }
                     }
                 }
@@ -93,8 +98,9 @@ struct BusinessProfileView: View {
             }
         }.frame(width:300,height: 600).onAppear{
             loadReviews()
-}
+        }.background(colorScheme == .dark ? Color.black : Color.white)
 
+        
     }
     
     private func saveReview(review: String, name:String, rating: Double) {
@@ -103,28 +109,28 @@ struct BusinessProfileView: View {
         saveReviews()
     }
     private func saveReviews() {
-          do {
-              let encoder = JSONEncoder()
-              let data = try encoder.encode(reviews)
-              
-              storedReviewsData = data
-          } catch {
-              print("Failed to encode reviews: \(error)")
-          }
-      }
-      
-      private func loadReviews() {
-          do {
-              let decoder = JSONDecoder()
-              let reviewsData = storedReviewsData
-              
-              let decodedReviews = try decoder.decode([Review].self, from: reviewsData)
-              
-              reviews = decodedReviews
-          } catch {
-              print("Failed to decode reviews: \(error)")
-          }
-      }
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(reviews)
+            
+            storedReviewsData = data
+        } catch {
+            print("Failed to encode reviews: \(error)")
+        }
+    }
+    
+    private func loadReviews() {
+        do {
+            let decoder = JSONDecoder()
+            let reviewsData = storedReviewsData
+            
+            let decodedReviews = try decoder.decode([Review].self, from: reviewsData)
+            
+            reviews = decodedReviews
+        } catch {
+            print("Failed to decode reviews: \(error)")
+        }
+    }
 }
 
 struct Review: Identifiable, Hashable,Codable

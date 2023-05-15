@@ -12,6 +12,7 @@ struct WriteReviewView: View {
     @State private var rating: Double = 0
     @State private var reviewText: String = ""
     @State private var name: String = ""
+    @Environment(\.colorScheme) var colorScheme
 
     let onSave: (String, String, Double) -> Void
     
@@ -48,7 +49,8 @@ struct WriteReviewView: View {
                 .padding(.top)
                 
                 Spacer()
-            }
+            }.accentColor(colorScheme == .dark ? .white : .black)
+
             .navigationBarTitle("Write a Review")
             .navigationBarItems(trailing: Button(action: {
                 isPresented = false
