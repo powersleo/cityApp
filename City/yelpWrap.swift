@@ -54,8 +54,8 @@ struct Location: Codable {
 func createURL(longitude: Double, latitude: Double) -> URL? {
     let baseURLString = "https://api.yelp.com/v3/businesses/search"
     
-    let locationQuery = "San Francisco"
-    let locationQueryItem = URLQueryItem(name: "location", value: locationQuery)
+//    let locationQuery = "San Francisco"
+//    let locationQueryItem = URLQueryItem(name: "location", value: locationQuery)
     
     let latitudeQueryItem = URLQueryItem(name: "latitude", value: String(latitude))
     let longitudeQueryItem = URLQueryItem(name: "longitude", value: String(longitude))
@@ -65,7 +65,7 @@ func createURL(longitude: Double, latitude: Double) -> URL? {
     let limitQueryItem = URLQueryItem(name: "limit", value: "20")
     
     var urlComponents = URLComponents(string: baseURLString)
-    urlComponents?.queryItems = [locationQueryItem, latitudeQueryItem, longitudeQueryItem, termQueryItem, categoriesQueryItem, sortByQueryItem, limitQueryItem]
+    urlComponents?.queryItems = [ latitudeQueryItem, longitudeQueryItem, termQueryItem, categoriesQueryItem, sortByQueryItem, limitQueryItem]
     
     guard let url = urlComponents?.url else {
         return nil
@@ -80,18 +80,14 @@ class BusinessService{
     
     
    public static func processBusinesses(long:Double, lat:Double,completion: @escaping (Result<Response, Error>) -> Void) {
-       let apiKey = "2a4LtmRKjx2uRW_m64Huawye2QILm5lIpxLFofuq96FmxC5dk-5FuIr0uiDNoWemIG5Jk2IajsByyDc16xaXTxyC_LwW9L-msDDgI8fqRlr4IGdNzZkHmFbOZOVdZHYx"
        guard let url = createURL(longitude: long, latitude: lat) else {
-               let error = NSError(domain: "com.example.app", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to create URL"])
-               completion(.failure(error))
                return
         }
         
-       let headers = ["accept": "application/json",   "Authorization": "Bearer hehe"]
+       let headers = ["accept": "application/json",   "Authorization": "Bearer sV7JzHn5BFqUSXRLCvv9bEtC9DAggwlmA6B1W_-0_T2bJPAbiAHyCYz62sr-CUolF6Pb48aBua0CvZEV5XP3YV320mPm4ujA13gj-_tvwlExAj3Mfaj19YJ3RM9eZHYx"]
        let request = NSMutableURLRequest(url: url,cachePolicy: .useProtocolCachePolicy,timeoutInterval: 10.0)
        request.httpMethod = "GET"
        request.allHTTPHeaderFields = headers
-       request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
 
        let session = URLSession.shared
 

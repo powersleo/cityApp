@@ -61,6 +61,7 @@ struct ContentView: View {
     @State private var showSearchBar:Bool = false
     @State private var businessLoaded:Bool = false
     @State private var showBusiness:Bool = false
+    
     //related to search functions
     @State private var searchQuery: String = ""
     @State private var searchResults: [MKMapItem] = []
@@ -93,7 +94,7 @@ struct ContentView: View {
                                             Button(action:{
                                                 selectedBusiness = business
                                                 showBusiness = true
-                                              
+                                                showSearchBar = true
                                                 showNav = true
                                                 showRecentlyViewedLocations = false
 
@@ -124,7 +125,7 @@ struct ContentView: View {
                                 BusinessProfileView(business: selectedBusiness)
                                 Button(action:{self.selectedBusiness = nil
                                     showNav = true
-                                    
+                                    showSearchBar = true
                                 }, label:{Text("Close")}  )
                             
                                 
