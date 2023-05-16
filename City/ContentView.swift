@@ -16,13 +16,13 @@ class ContentViewModel: ObservableObject {
     @Published var recentlyViewedPages: [Business] = []
     
     func fetchPlaces(long: Double, lat: Double, completion: @escaping ([Business]?, Error?) -> Void) {
+        self.updateMapRegion()
         
         BusinessService.processBusinesses(long: long, lat: lat) { result in
             switch result {
             case .success(let response):
                 DispatchQueue.main.async {
                     self.businesses = response.businesses
-                    self.updateMapRegion()
                     completion(response.businesses, nil)
                 }
             case .failure(let error):
@@ -33,14 +33,16 @@ class ContentViewModel: ObservableObject {
     }
     
     private func updateMapRegion() {
-        guard let firstBusiness = businesses.first else {
-            return
+        
+        if let location = locationDataManager.locationManager.location {
+            region.center = CLLocationCoordinate2D(
+                latitude: location.coordinate.latitude,
+                longitude: location.coordinate.longitude
+            )
+        } else {
+            region.center = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
         }
         
-        region.center = CLLocationCoordinate2D(
-            latitude: firstBusiness.coordinates.latitude,
-            longitude: firstBusiness.coordinates.longitude
-        )
         region.span = MKCoordinateSpan(
             latitudeDelta: 0.03,
             longitudeDelta: 0.03
@@ -52,7 +54,7 @@ struct ContentView: View {
     
     @StateObject var viewModel = ContentViewModel()
     @State var locationDataManager = LocationDataManager()
-    
+
     
     //handle appearence of navigation
     @State private var showRecentlyViewedLocations:Bool = false
@@ -212,25 +214,29 @@ struct SearchBar: View {
     var body: some View {
         VStack {
             HStack {
+                Spacer()
                 TextField("Search", text: $searchQuery, onCommit: {
                     performSearch()
                     self.showResults = true
                     showAlert = searchResults.isEmpty
                 })
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .textFieldStyle(.roundedBorder)
                 
                 Button(action: clearSearch) {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundColor(.gray)
-                        .opacity(searchQuery.isEmpty ? 0 : 1)
+//                        .opacity(searchQuery.isEmpty ? 0 : 1)
                 }
+                Spacer()
             }
             
             if showResults {
                 if searchResults.isEmpty {
                     Text("No results found")
                         .foregroundColor(.gray)
-                        .padding(.top, 8)
+                        .padding(.top, 8).onAppear{
+                            clearSearch()
+                        }
                 } else {
                     List(searchResults, id: \.self) { result in
                         VStack(alignment: .leading) {
