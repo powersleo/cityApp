@@ -26,7 +26,7 @@ struct WriteReviewView: View {
                     Form {
                         Section(header: Text("Enter a Name").bold()) {
                             VStack {
-                                TextField("Name", text: $name)
+                                TextField("Name", text: $name).disableAutocorrection(true)
                             }
                         }
                         
