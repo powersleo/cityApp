@@ -20,25 +20,7 @@ class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegat
             authorizationStatus = .authorizedWhenInUse
             locationManager.requestLocation()
             break
-            
-        case .restricted:
-            Alert(
-                            title: Text("nothing will work"),
-                            message: Text("cmon bruh."),
-                            dismissButton: .default(Text("OK"))
-            );
-            authorizationStatus = .restricted
-            break
-            
-        case .denied:
-            Alert(
-                            title: Text("nothing will work"),
-                            message: Text("cmon bruh."),
-                            dismissButton: .default(Text("OK"))
-            );
-            authorizationStatus = .denied
-            break
-            
+
         case .notDetermined:
             authorizationStatus = .notDetermined
             manager.requestWhenInUseAuthorization()
