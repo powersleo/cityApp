@@ -14,7 +14,7 @@ struct BusinessProfileView: View {
     @State private var newReview: String = ""
     @State private var reviews: [Review] = []
     @Environment(\.colorScheme) var colorScheme
-
+    
     @AppStorage("Reviews") var storedReviewsData: Data = Data()
     
     var body: some View {
@@ -48,6 +48,24 @@ struct BusinessProfileView: View {
                         .foregroundColor(.yellow)
                         .font(.headline)
                 }
+                
+                ForEach(1...5, id: \.self) { index in
+                    Image(systemName: index <= Int(business.crowd) ? "face.smiling" : "face.smiling.inverse")
+                        .foregroundColor(.yellow)
+                        .font(.headline)
+                }
+                
+                ForEach(1...5, id: \.self) { index in
+                    Image(systemName: index <= Int(business.drinks) ? "wineglass.fill" : "wineglass")
+                        .foregroundColor(.yellow)
+                        .font(.headline)
+                }
+                
+                ForEach(1...5, id: \.self) { index in
+                    Image(systemName: index <= Int(business.security) ? "dumbbell.fill" : "dumbbell")
+                        .foregroundColor(.yellow)
+                        .font(.headline)
+                }
             }
             Text("Reviews:")
                 .font(.headline)
@@ -59,24 +77,41 @@ struct BusinessProfileView: View {
                         Text("No reviews yet :(")
                             .foregroundColor(.gray)
                     } else {
-                        ForEach(reviews, id: \.self) { review in
-                            if review.businessName == business.name {
-                                VStack(alignment: .leading, spacing: 8) {
-                                    HStack {
-                                        Text(review.name).bold().foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                                        ForEach(1...5, id: \.self) { index in
-                                            Image(systemName: index <= Int(review.rating) ? "star.fill" : "star")
-                                                .foregroundColor(.yellow)
-                                                .font(.subheadline)
-                                        }
+                        ForEach(reviews.filter { $0.businessName == business.name }) { review in
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack {
+                                    Text(review.name).bold().foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                                    ForEach(1...5, id: \.self) { index in
+                                        Image(systemName: index <= Int(review.rating) ? "star.fill" : "star")
+                                            .foregroundColor(.yellow)
+                                            .font(.subheadline)
                                     }
-                                    Text(review.text).foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                                    
+                                    ForEach(1...5, id: \.self) { index in
+                                        Image(systemName: index <= Int(business.crowd) ? "face.smiling" : "face.smiling.inverse")
+                                            .foregroundColor(.yellow)
+                                            .font(.subheadline)
+                                    }
+                                    
+                                    ForEach(1...5, id: \.self) { index in
+                                        Image(systemName: index <= Int(business.drinks) ? "wineglass.fill" : "wineglass")
+                                            .foregroundColor(.yellow)
+                                            .font(.subheadline)
+                                    }
+                                    
+                                    ForEach(1...5, id: \.self) { index in
+                                        Image(systemName: index <= Int(business.security) ? "dumbbell.fill" : "dumbbell")
+                                            .foregroundColor(.yellow)
+                                            .font(.subheadline)
+                                    }
                                 }
-                                .padding(.bottom, 8)
+                                Text(review.text).foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                             }
+                            .padding(.bottom, 8)
                         }
                     }
                 }
+                
                 Button(action: {
                     isWritingReview = true
                 }) {
@@ -92,22 +127,24 @@ struct BusinessProfileView: View {
                 Spacer()
             }
             .sheet(isPresented: $isWritingReview) {
-                WriteReviewView(isPresented: $isWritingReview) {review, name, rating in
-                    saveReview(review: review, name:name, rating: rating)
+                WriteReviewView(isPresented: $isWritingReview) { name, review, rating, crowd, drinks, security in
+                    saveReview(review: review, name: name, rating: rating, crowd: crowd, drinks: drinks, security: security)
                 }
             }
-        }.frame(width:300,height: 600).onAppear{
+        }
+        .frame(width: 300, height: 600)
+        .onAppear {
             loadReviews()
-        }.background(colorScheme == .dark ? Color.black : Color.white)
-
-        
+        }
+        .background(colorScheme == .dark ? Color.black : Color.white)
     }
     
-    private func saveReview(review: String, name:String, rating: Double) {
-        let newReview = Review(text: review, name:name, rating: rating, businessName: business.name)
+    private func saveReview(review: String, name: String, rating: Double, crowd: Double, drinks: Double, security: Double) {
+        let newReview = Review(text: review, name: name, rating: rating, crowd: crowd, drinks: drinks, security: security, businessName: business.name)
         reviews.append(newReview)
         saveReviews()
     }
+    
     private func saveReviews() {
         do {
             let encoder = JSONEncoder()
@@ -133,11 +170,45 @@ struct BusinessProfileView: View {
     }
 }
 
-struct Review: Identifiable, Hashable,Codable
-{
+private func saveReview(review: String, name: String, rating: Double, crowd: Double, drinks: Double, security: Double) {
+    let newReview = Review(text: review, name: name, rating: rating, crowd: crowd, drinks: drinks, security: security, businessName: business.name)
+    reviews.append(newReview)
+    saveReviews()
+}
+
+private func saveReviews() {
+    do {
+        let encoder = JSONEncoder()
+        let data = try encoder.encode(reviews)
+        
+        storedReviewsData = data
+    } catch {
+        print("Failed to encode reviews: \(error)")
+    }
+}
+
+private func loadReviews() {
+    do {
+        let decoder = JSONDecoder()
+        let reviewsData = storedReviewsData
+        
+        let decodedReviews = try decoder.decode([Review].self, from: reviewsData)
+        
+        reviews = decodedReviews
+    } catch {
+        print("Failed to decode reviews: \(error)")
+    }
+}
+
+
+
+struct Review: Identifiable, Hashable, Codable {
     var id = UUID()
     let text: String
-    let name:String
+    let name: String
     let rating: Double
+    let crowd: Double
+    let drinks: Double
+    let security: Double
     let businessName: String
 }
