@@ -14,6 +14,7 @@ class ContentViewModel: ObservableObject {
     @Published var businesses: [Business] = []
     @StateObject var locationDataManager = LocationDataManager()
     @Published var recentlyViewedPages: [Business] = []
+    @Published var favorites:[Business] = []
     
     func fetchPlaces(long: Double, lat: Double, completion: @escaping ([Business]?, Error?) -> Void) {
         self.updateMapRegion()
@@ -76,10 +77,10 @@ struct ContentView: View {
             ZStack {
                 VStack{
                     if(showSearchBar){
-                        SearchBar(searchQuery: $searchQuery, searchResults: $searchResults, showResults: $showResults, selectedBusiness: $selectedBusiness, businesses: $viewModel.businesses, recentlyViewedPages:$viewModel.recentlyViewedPages)
+                        SearchBar(searchQuery: $searchQuery, searchResults: $searchResults, showResults: $showResults, selectedBusiness: $selectedBusiness, businesses: $viewModel.businesses, recentlyViewedPages:$viewModel.recentlyViewedPages, favorites:$viewModel.favorites)
                     }
                     if(businessLoaded){
-                        MapView(locationDataManager:$locationDataManager,userTrackingMode:$viewModel.userTrackingMode, region: $viewModel.region,selectedBusiness: $selectedBusiness, recentlyViewedPages:$viewModel.recentlyViewedPages,businesses: viewModel.businesses)
+                        MapView(locationDataManager:$locationDataManager,userTrackingMode:$viewModel.userTrackingMode, region: $viewModel.region,selectedBusiness: $selectedBusiness, recentlyViewedPages:$viewModel.recentlyViewedPages,favorites:$viewModel.favorites,businesses: viewModel.businesses )
                     }else{
                         Text("Loading...")
                     }
@@ -124,11 +125,13 @@ struct ContentView: View {
                             })
                         if let selectedBusiness = selectedBusiness {
                             VStack{
-                                BusinessProfileView(business: selectedBusiness)
+                                BusinessProfileView(business: selectedBusiness, favorites:$viewModel.favorites)
                                 Button(action:{self.selectedBusiness = nil
                                     showNav = true
                                     showSearchBar = true
                                 }, label:{Text("Close")}  )
+                                
+                             
                             
                                 
                             }.padding()
@@ -147,7 +150,7 @@ struct ContentView: View {
                         
                         HStack {
                             
-                            NavigationLink(destination: UserView()) {
+                            NavigationLink(destination: UserView(favorites: $viewModel.favorites)) {
                                 Image(systemName: "person.circle")
                                     .resizable()
                                     .frame(width: 40, height: 40)
@@ -209,6 +212,7 @@ struct SearchBar: View {
     @Binding var selectedBusiness: Business?
     @Binding var businesses: [Business]
     @Binding var recentlyViewedPages: [Business]
+    @Binding var favorites: [Business]
     @State private var showAlert = false
     
     var body: some View {
@@ -285,6 +289,13 @@ struct SearchBar: View {
             recentlyViewedPages.append(selectedBusiness)
         }
     }
+    
+    func addToFavorites(_ selectedBusiness: Business) {
+        if !favorites.contains(where: { $0.id == selectedBusiness.id }) {
+            favorites.append(selectedBusiness)
+        }
+    }
+    
     
     private func clearSearch() {
         searchQuery = ""

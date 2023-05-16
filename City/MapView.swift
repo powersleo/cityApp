@@ -7,16 +7,14 @@ struct MapView: View {
     @Binding var region: MKCoordinateRegion
     @Binding var selectedBusiness: Business?
     @Binding var recentlyViewedPages: [Business]
-    
+    @Binding var favorites: [Business]
+
     var businesses: [Business]
     @State var showNav: Bool = true
     
     var body: some View {
         VStack{
-           
-            
             ZStack {
-                
                 Map(coordinateRegion: $region,
                     interactionModes: MapInteractionModes.all,
                     showsUserLocation: true,
@@ -48,8 +46,8 @@ struct MapView: View {
                 
                 if let selectedBusiness = selectedBusiness {
                     VStack{
-                        BusinessProfileView(business: selectedBusiness)
-                        Button(action:{self.selectedBusiness = nil
+                        BusinessProfileView(business: selectedBusiness, favorites:$favorites)
+                                                Button(action:{self.selectedBusiness = nil
                             self.showNav = true;
                             checkAndAppendBusiness(selectedBusiness)                    }, label:{Text("Close")}  )
                         
@@ -131,6 +129,9 @@ struct MapView: View {
             recentlyViewedPages.append(selectedBusiness)
         }
     }
+    
+    
+    
 }
 
 

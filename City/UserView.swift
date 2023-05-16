@@ -8,36 +8,73 @@
 
 import SwiftUI
 
-
 struct UserView: View {
+    @Binding var favorites: [Business]
+    @Environment(\.colorScheme) var colorScheme
+    @State var selectedBusiness: Business? = nil
+    @State private var showBusiness = false
     var body: some View {
-        NavigationView{
-            ZStack{
+        ZStack{
+            
+            NavigationView {
                 VStack {
                     Image("Avatar")
                         .resizable()
-                        .frame(width:150, height: 150)
+                        .frame(width: 150, height: 150)
                         .clipShape(Circle())
-                        .offset()
+                        .padding()
                     
-                    Text("Username").font(.title)
+                    Text("Username")
+                        .font(.title)
+                        .padding(.bottom)
+                    
                     List {
-                        Text("Email")
-                        Text("Phone Number")
-                        Text("Password")
-                    
+                        Section(header: Text("Account")) {
+                            Text("Email")
+                            Text("Phone Number")
+                            Text("Password")
+                        }
+                        
+                        Section(header: Text("Favorites")) {
+                            if favorites.isEmpty {
+                                Text("No favorites :(")
+                            } else {
+                                ForEach(favorites) { business in
+                                    Button(action: {
+                                        selectedBusiness = business
+                                        showBusiness = true
+                                    }) {
+                                        Text(business.name)
+                                            .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-                    .navigationTitle("User Info Page")
-                    
+                
+                
+                
+            }.navigationTitle("User Info Page")
+            if(showBusiness){
+                if let selectedBusiness = selectedBusiness{
+                    VStack{
+                        BusinessProfileView(business: selectedBusiness, favorites:$favorites)
+                        Button(action:{self.selectedBusiness = nil
+                        }, label:{Text("Close")}  )
+                        
+                        
+                        
+                        
+                    }.padding()
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .shadow(radius: 4)
+                        .padding(16)
                 }
             }
+            
         }
-    }
-}
-
-struct UserView_Previews: PreviewProvider {
-    static var previews: some View {
-        UserView()
     }
 }
 

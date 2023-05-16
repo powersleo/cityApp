@@ -59,7 +59,7 @@ func createURL(longitude: Double, latitude: Double) -> URL? {
     
     let latitudeQueryItem = URLQueryItem(name: "latitude", value: String(latitude))
     let longitudeQueryItem = URLQueryItem(name: "longitude", value: String(longitude))
-    let termQueryItem = URLQueryItem(name: "term", value: "nightclub")
+    let termQueryItem = URLQueryItem(name: "term", value: "bar")
     let categoriesQueryItem = URLQueryItem(name: "categories", value: "")
     let sortByQueryItem = URLQueryItem(name: "sort_by", value: "best_match")
     let limitQueryItem = URLQueryItem(name: "limit", value: "20")

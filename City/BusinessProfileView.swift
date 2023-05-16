@@ -13,6 +13,9 @@ struct BusinessProfileView: View {
     @State private var isWritingReview = false
     @State private var newReview: String = ""
     @State private var reviews: [Review] = []
+    
+    @Binding var favorites:[Business]
+    
     @Environment(\.colorScheme) var colorScheme
     
     @AppStorage("Reviews") var storedReviewsData: Data = Data()
@@ -43,30 +46,31 @@ struct BusinessProfileView: View {
             Text("Distance: \(String(format: "%.2f", distanceInMiles.value)) miles").font(.caption)
             Text(business.name)
                 .font(.title)
+            Link(business.displayPhone, destination: URL(string: "tel:\(business.phone)")!)
+
+            Text(business.location.displayAddress[0]).font(.caption)
+
             HStack {
                 ForEach(1...5, id: \.self) { index in
                     Image(systemName: index <= Int(business.rating) ? "star.fill" : "star")
                         .foregroundColor(.yellow)
                         .font(.headline)
                 }
-                
-                //                ForEach(1...5, id: \.self) { index in
-                //                    Image(systemName: index <= Int(business.crowd) ? "face.smiling" : "face.smiling.inverse")
-                //                        .foregroundColor(.yellow)
-                //                        .font(.headline)
-                //                }
-                //
-                //                ForEach(1...5, id: \.self) { index in
-                //                    Image(systemName: index <= Int(business.drinks) ? "wineglass.fill" : "wineglass")
-                //                        .foregroundColor(.yellow)
-                //                        .font(.headline)
-                //                }
-                //
-                //                ForEach(1...5, id: \.self) { index in
-                //                    Image(systemName: index <= Int(business.security) ? "dumbbell.fill" : "dumbbell")
-                //                        .foregroundColor(.yellow)
-                //                        .font(.headline)
-                //                }
+            }
+            if favorites.contains(where: { $0.id == business.id }) {
+                Text("Favorite")
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(Color.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }else{
+                Button(action:{addToFavorites(business)}, label:{Text("Add to Favorites")}  )
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
             }
             Text("Reviews:")
                 .font(.headline)
@@ -235,6 +239,11 @@ struct BusinessProfileView: View {
         }
     }
     
+    func addToFavorites(_ selectedBusiness: Business) {
+        if !favorites.contains(where: { $0.id == selectedBusiness.id }) {
+            favorites.append(selectedBusiness)
+        }
+    }
     
     
 }

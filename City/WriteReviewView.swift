@@ -9,10 +9,10 @@ import SwiftUI
 
 struct WriteReviewView: View {
     @Binding var isPresented: Bool
-    @State private var rating: Double = 0
-    @State private var crowd: Double = 0
-    @State private var drinks: Double = 0
-    @State private var security: Double = 0
+    @State private var rating: Double = 1
+    @State private var crowd: Double = 1
+    @State private var drinks: Double = 1
+    @State private var security: Double = 1
     @State private var reviewText: String = ""
     @State private var name: String = ""
     @Environment(\.colorScheme) var colorScheme
@@ -24,35 +24,49 @@ struct WriteReviewView: View {
             VStack {
                 VStack{
                     Form {
-                        Section {
-//                            Text("Enter a Name").bold()
-                            TextField("Name", text: $name)
+                        Section(header: Text("Enter a Name").bold()) {
+                            VStack {
+                                TextField("Name", text: $name)
+                            }
+                        }
+                        
+                        Section(header: Text("Rating: \(Int(rating))").bold()) {
+                            VStack {
+                                Slider(value: $rating, in: 1...5, step: 1)
+                            }
+                        }
+                        
+                        Section(header: Text("Crowd: \(Int(crowd))").bold()) {
+                            VStack {
+                                Slider(value: $crowd, in: 1...5, step: 1)
+                            }
+                        }
+                        
+                        Section(header: Text("Drinks: \(Int(drinks))").bold()) {
+                            VStack {
+                                Slider(value: $drinks, in: 1...5, step: 1)
+                            }
                             
-                            Text("Rating: \(Int(rating))").bold()
-                            Slider(value: $rating, in: 1...5, step: 1)
                             
-                            Text("Crowd: \(Int(crowd))").bold()
-                            Slider(value: $crowd, in: 1...5, step: 1)
-                             //face.smiling.inverse
-                            
-                            Text("Drinks: \(Int(drinks))").bold()
-                            Slider(value: $drinks, in: 1...5, step: 1)
-                                //wineglass.fill
-                            
-                            Text("Security: \(Int(security))").bold()
-                            Slider(value: $security, in: 1...5, step: 1)
-                            //dumbbell // dumbbell.fill
-                            
-                            Text("Write a Review:")
-                            .font(.headline)
-//                            TextEditor(text: $reviewText)
-                        } 
+                        }
+                        
+                        Section(header: Text("Security: \(Int(security))").bold()) {
+                            VStack {
+                                Slider(value: $security, in: 1...5, step: 1)
+                            }
+                        }
+                        
+                        Section(header: Text("Write a Review:").font(.headline)) {
+                            VStack {
+                                TextEditor(text: $reviewText)
+                            }
+                        }
                     }
                 }
                 .padding()
                 
                 Button(action: {
-                    onSave(reviewText, name, rating, crowd, drinks, security)
+                    onSave(name, reviewText, rating, crowd, drinks, security)
                         isPresented = false
                 }) {
                     Text("Save")
